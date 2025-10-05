@@ -1,25 +1,30 @@
 package util;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class CSVExporter {
     private static final String FILE_NAME = "results.csv";
     private static boolean headerWritten = false;
 
-    public static void saveResult(int n, double timeMs, long comps, long swaps, long accesses, String algorithm) {
-        try (FileWriter writer = new FileWriter(FILE_NAME, true)) {
+    public static void saveResult(int n, double timeMs, long comparisons,
+                                  long swaps, long accesses, long allocations,
+                                  double memoryMB, String inputType) {
+        String fileName = "results.csv";
+        boolean fileExists = new File(fileName).exists();
 
-            if (!headerWritten) {
-                writer.write("Algorithm,ArraySize,Time(ms),Comparisons,Swaps,Accesses\n");
-                headerWritten = true;
+        try (PrintWriter pw = new PrintWriter(new FileWriter(fileName, true))) {
+            if (!fileExists) {
+                pw.println("n,inputType,timeMs,comparisons,swaps,accesses,allocations,memoryMB");
             }
-
-            writer.write(String.format("%s,%d,%.4f,%d,%d,%d\n",
-                    algorithm, n, timeMs, comps, swaps, accesses));
-
+            pw.printf("%d,%s,%.3f,%d,%d,%d,%d,%.2f%n",
+                    n, inputType, timeMs, comparisons, swaps, accesses, allocations, memoryMB);
         } catch (IOException e) {
-            System.err.println("Error when writing to CSV: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
+
+
