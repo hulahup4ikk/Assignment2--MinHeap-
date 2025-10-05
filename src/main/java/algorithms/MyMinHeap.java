@@ -3,7 +3,6 @@ package algorithms;
 import java.util.ArrayList;
 import metrics.PerformanceTracker;
 
-
 public class MyMinHeap<T extends Comparable<T>> {
     private final ArrayList<T> heap = new ArrayList<>();
     private final PerformanceTracker tracker;
@@ -16,10 +15,8 @@ public class MyMinHeap<T extends Comparable<T>> {
         int oldCapacity = heap.size();
         heap.add(value);
         tracker.incrementAccesses();
-
         if (heap.size() > oldCapacity && heap.size() % 2 == 0)
             tracker.incrementAllocations();
-
         heapifyUp(heap.size() - 1);
     }
 
@@ -28,14 +25,13 @@ public class MyMinHeap<T extends Comparable<T>> {
             throw new IllegalStateException("Heap is empty");
         }
         T min = heap.get(0);
-        tracker.incrementAccesses(); // read root
-
+        tracker.incrementAccesses();
         T last = heap.remove(heap.size() - 1);
-        tracker.incrementAccesses(); // remove read+write (amortized as 1)
+        tracker.incrementAccesses();
 
         if (!heap.isEmpty()) {
             heap.set(0, last);
-            tracker.incrementAccesses(); // write root
+            tracker.incrementAccesses();
             heapifyDown(0);
         }
         return min;
@@ -51,19 +47,18 @@ public class MyMinHeap<T extends Comparable<T>> {
 
         tracker.incrementAccesses();
         T oldValue = heap.get(index);
-
         tracker.incrementComparisons();
+
         if (newValue.compareTo(oldValue) > 0) {
             throw new IllegalArgumentException(
-                    "New value (" + newValue + ") must not be greater than current (" + oldValue + ")");
+                    "New value (" + newValue + ") must not be greater than current (" + oldValue + ")"
+            );
         }
 
         heap.set(index, newValue);
         tracker.incrementAccesses();
-
         heapifyUp(index);
     }
-
 
     public void merge(MyMinHeap<T> other) {
         if (other == null) {
@@ -76,20 +71,18 @@ public class MyMinHeap<T extends Comparable<T>> {
         heap.addAll(other.heap);
         tracker.incrementAccesses();
         tracker.incrementAllocations();
-
         buildHeap();
     }
 
     private void heapifyUp(int i) {
         while (i > 0) {
             int p = (i - 1) / 2;
-
             T cur = heap.get(i);
             T par = heap.get(p);
             tracker.incrementAccesses();
             tracker.incrementAccesses();
-
             tracker.incrementComparisons();
+
             if (cur.compareTo(par) >= 0) break;
 
             swap(i, p);
@@ -136,9 +129,10 @@ public class MyMinHeap<T extends Comparable<T>> {
     private void swap(int i, int j) {
         tracker.incrementSwaps();
         T tmp = heap.get(i);
-        T b   = heap.get(j);
+        T b = heap.get(j);
         tracker.incrementAccesses(); // read i
         tracker.incrementAccesses(); // read j
+
         heap.set(i, b);
         heap.set(j, tmp);
         tracker.incrementAccesses(); // write i
@@ -151,7 +145,11 @@ public class MyMinHeap<T extends Comparable<T>> {
         }
     }
 
+    public boolean isEmpty() {
+        return heap.isEmpty();
+    }
 
-    public boolean isEmpty() { return heap.isEmpty(); }
-    public int size() { return heap.size(); }
+    public int size() {
+        return heap.size();
+    }
 }

@@ -35,7 +35,6 @@ public class BenchmarkRunner {
         System.out.println("\nResults saved to results.csv");
     }
 
-    // === Benchmark for one dataset type ===
     private static void runBenchmarkForType(int n, int[] data, String type) {
         PerformanceTracker tracker = new PerformanceTracker();
         double totalTime = 0;
@@ -46,18 +45,15 @@ public class BenchmarkRunner {
             MyMinHeap<Integer> heap = new MyMinHeap<>(tracker);
             Runtime rt = Runtime.getRuntime();
 
-            // memory before
             System.gc();
             long beforeMem = rt.totalMemory() - rt.freeMemory();
 
-            // insert all
             for (int x : data) heap.insert(x);
 
             long start = System.nanoTime();
             while (!heap.isEmpty()) heap.extractMin();
             long end = System.nanoTime();
 
-            // memory after
             long afterMem = rt.totalMemory() - rt.freeMemory();
             double usedMB = Math.max(0, (afterMem - beforeMem) / 1e6);
             totalMemoryMB += usedMB;
@@ -83,7 +79,6 @@ public class BenchmarkRunner {
         );
     }
 
-    // === Generators ===
 
     private static int[] generateRandomArray(int n, Random rand) {
         int[] arr = new int[n];
