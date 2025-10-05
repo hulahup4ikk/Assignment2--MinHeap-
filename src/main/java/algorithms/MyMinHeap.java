@@ -13,8 +13,13 @@ public class MyMinHeap<T extends Comparable<T>> {
     }
 
     public void insert(T value) {
+        int oldCapacity = heap.size();
         heap.add(value);
-        tracker.incrementAccesses(); // add write
+        tracker.incrementAccesses();
+
+        if (heap.size() > oldCapacity && heap.size() % 2 == 0)
+            tracker.incrementAllocations();
+
         heapifyUp(heap.size() - 1);
     }
 
@@ -68,11 +73,11 @@ public class MyMinHeap<T extends Comparable<T>> {
             throw new IllegalArgumentException("Cannot merge heap with itself");
         }
 
-        for (T item : other.heap) {
-            if (item != null) {
-                insert(item);
-            }
-        }
+        heap.addAll(other.heap);
+        tracker.incrementAccesses();
+        tracker.incrementAllocations();
+
+        buildHeap();
     }
 
     private void heapifyUp(int i) {
@@ -98,24 +103,31 @@ public class MyMinHeap<T extends Comparable<T>> {
             int l = 2 * i + 1;
             int r = 2 * i + 2;
             int smallest = i;
+            T smallestVal = heap.get(i);
+            tracker.incrementAccesses();
 
             if (l < n) {
                 T left = heap.get(l);
-                T smv  = heap.get(smallest);
-                tracker.incrementAccesses();
                 tracker.incrementAccesses();
                 tracker.incrementComparisons();
-                if (left.compareTo(smv) < 0) smallest = l;
+                if (left.compareTo(smallestVal) < 0) {
+                    smallest = l;
+                    smallestVal = left;
+                }
             }
+
             if (r < n) {
                 T right = heap.get(r);
-                T smv   = heap.get(smallest);
-                tracker.incrementAccesses();
                 tracker.incrementAccesses();
                 tracker.incrementComparisons();
-                if (right.compareTo(smv) < 0) smallest = r;
+                if (right.compareTo(smallestVal) < 0) {
+                    smallest = r;
+                    smallestVal = right;
+                }
             }
+
             if (smallest == i) break;
+
             swap(i, smallest);
             i = smallest;
         }
@@ -133,7 +145,13 @@ public class MyMinHeap<T extends Comparable<T>> {
         tracker.incrementAccesses(); // write j
     }
 
+    public void buildHeap() {
+        for (int i = heap.size() / 2 - 1; i >= 0; i--) {
+            heapifyDown(i);
+        }
+    }
+
+
     public boolean isEmpty() { return heap.isEmpty(); }
     public int size() { return heap.size(); }
-    public ArrayList<T> getHeap() { return heap; } // for tests/debug
 }
