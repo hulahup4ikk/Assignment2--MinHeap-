@@ -1,0 +1,5 @@
+Algorithm,ArraySize,Time(ms),Comparisons,Swaps,Accesses
+MinHeap,100,0,2454,196,512,200
+MinHeap,1000,0,9612,2260,8593,2000
+MinHeap,10000,7,4310,22947,119760,20000
+MinHeap,100000,29,7771,227497,1528217,200000

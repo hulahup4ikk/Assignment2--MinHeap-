@@ -10,14 +10,12 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <!-- Укажи версию Java -->
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
-    <!-- ✅ JUnit 5 (Jupiter API + Engine) -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -28,7 +26,6 @@
 
   <build>
     <plugins>
-      <!-- ✅ Компилятор Java -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -38,7 +35,6 @@
         </configuration>
       </plugin>
 
-      <!-- ✅ Плагин для запуска тестов JUnit 5 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -48,13 +44,12 @@
         </configuration>
       </plugin>
 
-      <!-- ✅ Чтобы можно было запускать main через Maven -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
-          <mainClass>cli.HeapCLI</mainClass>
+          <mainClass>cli.BenchmarkRunner</mainClass>
         </configuration>
       </plugin>
     </plugins>

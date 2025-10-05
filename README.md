@@ -13,4 +13,4 @@ This project implements a Min-Heap data structure in Java with additional operat
 
 ## Run
 ```bash
-mvn clean compile exec:java -Dexec.mainClass="cli.HeapCLI"
+mvn clean compile exec:java -Dexec.mainClass="cli.BenchmarkRunner"
